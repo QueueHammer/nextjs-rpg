@@ -1,0 +1,48 @@
+html, body, #__next {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+}
+
+$width: 10;
+$height: 10;
+$pixel-block-size: 16px;
+
+.terrain {
+  display: grid;
+}
+.entity-layer {
+  display: grid;
+  position: fixed;
+  left: 0;
+  top: 0;
+}
+
+.tile  {
+  display: inline-block;
+  height: $pixel-block-size;
+  width: $pixel-block-size;
+  background-repeat: no-repeat;
+}
+
+@mixin bgPosition($x, $y) {
+  background-position: (-$pixel-block-size * $x) (-$pixel-block-size * $y);
+}
+
+.ground {
+  background-image: url('/Ground/Grass.png');
+}
+
+.farmer {
+  background-image: url('/Characters/Workers/FarmerTemplate.png');
+  position: relative;
+  @include bgPosition(2, 0);
+}
+
+.grass {
+  @include bgPosition(2, 0);
+}
+
+.dry-grass {
+  @include bgPosition(1, 0);
+}

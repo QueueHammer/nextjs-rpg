@@ -1,0 +1,34 @@
+version: 2.1
+# jobs:
+#   build:
+#     docker:
+#       - image: node:15.0.1-alpine3.12
+#     steps:
+#       - checkout
+#       - run: |
+#           npm install
+#           npm run build
+#           npm run export
+#       - persist_to_workspace:
+#           root: .
+#           paths:
+#             - out
+#   deploy:
+#     docker:
+#       - image: amazon/aws-cli:2.0.60
+#         entrypoint: /bin/sh
+#     steps:
+#       - run: |
+#           yum -y install tar gzip
+#       - attach_workspace:
+#           at: /root/project
+#       - run: |
+#           aws s3 cp /root/project/out s3://<bucket-name> --recursive
+# workflows:
+#   version: 2
+#   build_and_deploy:
+#     jobs:
+#       - build
+#       - deploy:
+#           requires:
+#             - build
