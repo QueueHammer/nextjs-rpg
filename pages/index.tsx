@@ -4,22 +4,14 @@ import EntityLayer from '../components/EntityLayer';
 import { useState } from 'React';
 import GameBoard from '../components/GameBoard';
 import IDimensions from '../src/interfaces/dimensions';
+import Terrain from '../src/terrain';
 
 
 const width = 64;
 const height = width;
 
-const baseTile = {
-  tile: true,
-  ground: true,
-};
-const grass = { grass: true, };
-const dryGrass = { 'dry-grass': true, };
+const terrain = Terrain(width, height);
 
-const terrain = _.range(width * height).map($ => ({
-  ... baseTile,
-  ... (Math.random() < 0.80 ? grass : dryGrass)
-}));
 const entities = [];
   const dimensions: IDimensions = {
     width,
