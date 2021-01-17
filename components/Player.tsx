@@ -4,38 +4,45 @@ import PlayerKeyMap, { ActionTypes } from '../src/player-key-map';
 import useKeyPress from '../src/use-key-press';
 import Entity from './Entity';
 
-export default function Player({}: IProps) {
-  // const { width, height, resolution, units } = dimensions;
+export default function Player({dimensions, terrain}: IProps) {
   const [playerPosition, setPlayerPosition] = useState({x: 0, y: 0});
+  const { width, height } = dimensions;
 
   useKeyPress((e: KeyboardEvent) => {
-    const key = e.key.replace(/arrow/i, '').toLowerCase();
     e.preventDefault();
 
+    const key = e.key.replace(/arrow/i, '').toLowerCase();
     const action = PlayerKeyMap(e);
-    if(action.type === ActionTypes.MOVE) {
-      let move = action.payload;
-      setPlayerPosition({
-        ... playerPosition,
-        ... (action.payload.x !== undefined ?
-            { x: playerPosition.x + move.x }:
-            { y: playerPosition.y + move.y }
-        )
-      });
-    }
+
+    if(action.type !== ActionTypes.MOVE) { return; }
+
+    const move = action.payload;
+    const nPos = {
+      ... playerPosition,
+      ... (action.payload.x !== undefined ?
+          { x: playerPosition.x + move.x }:
+          { y: playerPosition.y + move.y }
+      )
+    };
+
+    if(nPos.x < 0 || width <= nPos.x ) { return; }
+    if(nPos.y < 0 || height <= nPos.y ) { return; }
+
+    const totalOffset = (nPos.y * dimensions.width) + nPos.x;
+
+    if(terrain[totalOffset].solid) { return; }
+
+    setPlayerPosition(nPos);
   });
 
-  return <div
-    className="entity-layer"
-    style={{
-      gridTemplateColumns: `repeat(${width}, ${resolution}${units})`,
-      gridTemplateRows: `repeat(${height}, ${resolution}${units})`
-    }}>
-    <Entity offset={playerPosition} names={{farmer: true}} dimensions={dimensions}/>
-  </div>;
+  return <Entity
+    offset={playerPosition}
+    names={{farmer: true, player: true}}
+    dimensions={dimensions}
+  />;
 }
 
 interface IProps {
-  entities: any;
+  terrain: any;
   dimensions: IDimensions;
 }

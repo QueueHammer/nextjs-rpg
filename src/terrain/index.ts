@@ -1,21 +1,20 @@
-import _ from 'lodash';
+import { range } from 'lodash';
 
 export default function Terrain(width: number, height: number) {
   const baseTile: any = {
   };
   const grass = { grass: true, };
   const dryGrass = { grass: true, dry: true};
-  const terrain = _.range(width * height).map(tileGenerator);
+  const terrain = range(width * height).map(tileGenerator);
   const length = terrain.length;
 
-  _.range(length * 0.15).forEach($ => {
+  range(length * 0.05).forEach($ => {
     const index = Math.floor(Math.random() * length);
     const cell = terrain[index];
     cell.layers.push({
       rock: true
     });
     cell.solid = true;
-    console.log(cell);
   });
 
   return terrain;

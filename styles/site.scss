@@ -11,11 +11,19 @@ html, body, #__next {
 .terrain-layer {
   display: grid;
 }
+
 .entity-layer {
-  display: grid;
   position: fixed;
   left: 0;
   top: 0;
+
+  > div {
+    width: $pixel-block-size;
+    height: $pixel-block-size;
+    position: fixed;
+    left: 0;
+    top: 0;
+  }
 }
 
 .tile  {
@@ -23,14 +31,14 @@ html, body, #__next {
   width: $pixel-block-size;
   transform: scale(1);
   overflow: hidden;
-}
 
-.tile > div {
-  width: $pixel-block-size;
-  height: $pixel-block-size;
-  position: fixed;
-  left: 0;
-  top: 0;
+  > div {
+    width: $pixel-block-size;
+    height: $pixel-block-size;
+    position: fixed;
+    left: 0;
+    top: 0;
+  }
 }
 
 @mixin bgPosition($x, $y) {
@@ -73,6 +81,10 @@ html, body, #__next {
 
 .rock.dark-green {
   @include bgPositionY(1);
+}
+
+.player {
+  transition: '0.2s cubic-bezier(0.37, 0, 0.63, 1)'
 }
 
 .farmer {

@@ -1,8 +1,6 @@
 import _ from 'lodash';
-import TerrainLayer from '../components/TerrainLayer';
-import EntityLayer from '../components/EntityLayer';
-import { useState } from 'React';
 import GameBoard from '../components/GameBoard';
+import Player from '../components/Player';
 import IDimensions from '../src/interfaces/dimensions';
 import Terrain from '../src/terrain';
 
@@ -12,7 +10,7 @@ const height = width;
 
 const terrain = Terrain(width, height);
 
-const entities = [];
+const entities = [(props) => Player({terrain, ... props })];
   const dimensions: IDimensions = {
     width,
     height,
