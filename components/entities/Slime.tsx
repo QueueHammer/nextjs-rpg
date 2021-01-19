@@ -6,26 +6,19 @@ import IPosition, { IPartial } from '../../src/interfaces/position';
 import Entity from '../Entity';
 
 const classNames = ['slime'].join(' ');
-const directions = [
-  'east',
-  'north',
-  'west',
-  'south',
-];
 
 export default function Slime({dimensions, terrain, startPos, tickService, timeOfInit}: IProps) {
   const [position, setPosition] = useState(startPos);
-  const [lastMove, setLastMove] = useState<IPosition>();
   const [isMoving, setIsMoving] = useState<boolean>();
   const [direction, setDirection] = useState<string>();
 
   useEffect(() => {
     const id = setInterval(() => {
-      const moves: IPartial[] = [
-        { x: 1 },
-        { y: 1 },
-        { x: -1 },
-        { y: -1 },
+      const moves: IDirection[] = [
+        { x: 1, direction: 'east' },
+        { y: 1, direction: 'south' },
+        { x: -1, direction: 'west' },
+        { y: -1, direction: 'north' },
       ];
       let cantMove = true;
       let nPos: IPosition;
@@ -35,29 +28,38 @@ export default function Slime({dimensions, terrain, startPos, tickService, timeO
       while(moves.length > 0 && cantMove) {
         index = _.random(moves.length - 1);
         move = moves[index];
+        const newMove = move.x !== undefined ?
+            { x: position.x + move.x }:
+            { y: position.y + move.y };
         nPos = {
           ... position,
-          ... (move.x !== undefined ?
-            { x: position.x + move.x }:
-            { y: position.y + move.y }
-          )
+          ... newMove
         };
 
         cantMove = !terrain.canMove(nPos);
-        if(cantMove) { moves.splice(index, 1); }
+        if(cantMove) {
+          console.log('Failed to move', move, position);
+          moves.splice(index, 1);
+        }
       }
 
       if(cantMove) { return; };
+      const delta = {
+        x: Math.abs(nPos.x  - position.x),
+        y: Math.abs(nPos.y  - position.y)
+      };
+      if(delta.x > 1 || delta.y > 1 || (delta.x + delta.y) > 1) {
+        console.log('error');
+      }
       setPosition(nPos);
-      setLastMove(move);
       setIsMoving(true);
-      setDirection(directions[index]);
+      setDirection(move.direction);
       setTimeout(() => {
         setIsMoving(false);
       }, 1000);
     }, 2500);
     return () => clearInterval(id);
-  }, [position.x, position.y, isMoving, direction]);
+  }, [position.x, position.y]);
 
   return <Entity
     offset={position}
@@ -74,4 +76,8 @@ interface IProps {
   timeService: Observable<number>;
   startPos: { x: number, y: number };
   timeOfInit: string;
+}
+
+interface IDirection extends IPartial {
+  direction: 'east' | 'south' | 'west' | 'north';
 }

@@ -96,6 +96,6 @@ html, body, #__next {
 .slime {
   background-image: url('/Characters/Monsters/Slimes/Slime.png');
   position: relative;
-  transition: left 1s ease-out, top 1s ease-out;
+  transition: left 1s ease-in, top 1s ease-in;
   @include bgPositionY(0);
 }
