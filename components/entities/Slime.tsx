@@ -2,33 +2,38 @@ import _ from 'lodash';
 import React, { useState, useEffect } from 'react';
 import { Observable } from 'rxjs';
 import IDimensions from '../../src/interfaces/dimensions';
+import IPosition, { IPartial } from '../../src/interfaces/position';
 import Entity from '../Entity';
 
 const classNames = ['slime'].join(' ');
+const directions = [
+  'east',
+  'north',
+  'west',
+  'south',
+];
 
 export default function Slime({dimensions, terrain, startPos, tickService, timeOfInit}: IProps) {
   const [position, setPosition] = useState(startPos);
-  const [lastMove, setLastMove] = useState<any>();
+  const [lastMove, setLastMove] = useState<IPosition>();
+  const [isMoving, setIsMoving] = useState<boolean>();
+  const [direction, setDirection] = useState<string>();
 
   useEffect(() => {
     const id = setInterval(() => {
-      const moves = [
+      const moves: IPartial[] = [
         { x: 1 },
         { y: 1 },
         { x: -1 },
         { y: -1 },
       ];
       let cantMove = true;
-      let nPos: any;
+      let nPos: IPosition;
       let move: any;
-
-      // if(lastMove !== undefined) {
-      //   moves.push(lastMove);
-      //   moves.push(lastMove);
-      // }
+      let index: number;
 
       while(moves.length > 0 && cantMove) {
-        let index = _.random(moves.length - 1);
+        index = _.random(moves.length - 1);
         move = moves[index];
         nPos = {
           ... position,
@@ -45,13 +50,20 @@ export default function Slime({dimensions, terrain, startPos, tickService, timeO
       if(cantMove) { return; };
       setPosition(nPos);
       setLastMove(move);
-    }, 2000);
+      setIsMoving(true);
+      setDirection(directions[index]);
+      setTimeout(() => {
+        setIsMoving(false);
+      }, 1000);
+    }, 2500);
     return () => clearInterval(id);
-  }, [position.x, position.y]);
+  }, [position.x, position.y, isMoving, direction]);
 
   return <Entity
     offset={position}
-    classNames={classNames}
+    classNames={isMoving ?
+      classNames + ' moving ' + direction :
+      classNames}
     dimensions={dimensions}
   />;
 }

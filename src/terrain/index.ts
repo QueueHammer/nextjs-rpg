@@ -1,4 +1,5 @@
 import { range } from 'lodash';
+import IPosition from '../interfaces/position';
 
 export default function Terrain(width: number, height: number) {
   const baseTile: any = {
@@ -17,7 +18,7 @@ export default function Terrain(width: number, height: number) {
     cell.solid = true;
   });
 
-  terrain.canMove = ({x, y}) => {
+  terrain.canMove = ({x, y}: IPosition) => {
     if(x < 0 || width <= x ) { return false; }
     if(y < 0 || height <= y ) { return false; }
 
