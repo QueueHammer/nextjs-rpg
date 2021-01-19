@@ -1,6 +1,5 @@
-$width: 10;
-$height: 10;
-$pixel-block-size: 16px;
+@use './config' as c;
+@import './animation.scss';
 
 html, body, #__next {
   margin: 0;
@@ -18,8 +17,8 @@ html, body, #__next {
   top: 0;
 
   > div {
-    width: $pixel-block-size;
-    height: $pixel-block-size;
+    width: c.$pixel-block-size;
+    height: c.$pixel-block-size;
     position: fixed;
     left: 0;
     top: 0;
@@ -27,14 +26,14 @@ html, body, #__next {
 }
 
 .tile  {
-  height: $pixel-block-size;
-  width: $pixel-block-size;
+  height: c.$pixel-block-size;
+  width: c.$pixel-block-size;
   transform: scale(1);
   overflow: hidden;
 
   > div {
-    width: $pixel-block-size;
-    height: $pixel-block-size;
+    width: c.$pixel-block-size;
+    height: c.$pixel-block-size;
     position: fixed;
     left: 0;
     top: 0;
@@ -42,15 +41,15 @@ html, body, #__next {
 }
 
 @mixin bgPosition($x, $y) {
-  background-position: (-$pixel-block-size * $x) (-$pixel-block-size * $y);
+  background-position: -(c.$pixel-block-size * $x) -(c.$pixel-block-size * $y);
 }
 
 @mixin bgPositionX($x) {
-  background-position-x: (-$pixel-block-size * $x);
+  background-position-x: (c.$pixel-block-size * $x);
 }
 
 @mixin bgPositionY($y) {
-  background-position-y: (-$pixel-block-size * $y);
+  background-position-y: (c.$pixel-block-size * $y);
 }
 
 .grass {
@@ -91,4 +90,10 @@ html, body, #__next {
   background-image: url('/Characters/Workers/FarmerTemplate.png');
   position: relative;
   @include bgPosition(2, 0);
+}
+
+.slime {
+  background-image: url('/Characters/Monsters/Slimes/Slime.png');
+  position: relative;
+  @include bgPositionY(0);
 }

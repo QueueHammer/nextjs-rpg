@@ -1,0 +1,40 @@
+@use './config' as c;
+
+@mixin animateSprites($y, $steps) {
+  from {
+    background-position-x: 0px;
+    background-position-y: -(c.$pixel-block-size * ($y + 0));
+  }
+  to {
+    background-position-x: (c.$pixel-block-size * $steps);
+    background-position-y: -(c.$pixel-block-size * ($y + 0));
+  }
+}
+
+@for $i from 0 through 3 {
+  @keyframes play-#{$i}-6 {
+    @include animateSprites($i, 6);
+  }
+}
+
+.moving {
+  animation-duration: 1s;
+  animation-timing-function: steps(6);
+  animation-iteration-count: infinite;
+
+  &.south {
+    animation-name: play-0-6
+  }
+
+  &.west {
+    animation-name: play-1-6
+  }
+
+  &.east {
+    animation-name: play-2-6
+  }
+
+  &.north {
+    animation-name: play-3-6
+  }
+}

@@ -17,6 +17,18 @@ export default function Terrain(width: number, height: number) {
     cell.solid = true;
   });
 
+  terrain.canMove = ({x, y}) => {
+    if(x < 0 || width <= x ) { return false; }
+    if(y < 0 || height <= y ) { return false; }
+
+    const offset = (y * width) + x;
+    const cell = terrain[offset];
+
+    if(!cell) { return false; }
+
+    return !(cell.solid || cell.filled); 
+  }
+
   return terrain;
 
   function tileGenerator() {
