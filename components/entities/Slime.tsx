@@ -4,6 +4,8 @@ import { Observable } from 'rxjs';
 import IDimensions from '../../src/interfaces/dimensions';
 import Entity from '../Entity';
 
+const classNames = ['slime'].join(' ');
+
 export default function Slime({dimensions, terrain, startPos, tickService, timeOfInit}: IProps) {
   const [position, setPosition] = useState(startPos);
   const [lastMove, setLastMove] = useState<any>();
@@ -27,7 +29,6 @@ export default function Slime({dimensions, terrain, startPos, tickService, timeO
 
       while(moves.length > 0 && cantMove) {
         let index = _.random(moves.length - 1);
-        console.log('picked', index, moves.length);
         move = moves[index];
         nPos = {
           ... position,
@@ -44,14 +45,13 @@ export default function Slime({dimensions, terrain, startPos, tickService, timeO
       if(cantMove) { return; };
       setPosition(nPos);
       setLastMove(move);
-      console.log('picked', move);
     }, 2000);
     return () => clearInterval(id);
   }, [position.x, position.y]);
 
   return <Entity
     offset={position}
-    names={{ slime: true }}
+    classNames={classNames}
     dimensions={dimensions}
   />;
 }

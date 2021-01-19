@@ -13,7 +13,11 @@ const terrain = Terrain(width, height);
 const entities = [
   (props) => Player({terrain, ... props }),
   (props) => Slime({terrain, startPos: {x: _.random(width), y: 0}, ... props })
-];
+].concat(_.range(25)
+  .map($ => ({x: _.random(width), y: _.random(height)}))
+  .map(startPos =>
+    (props) => Slime({terrain, startPos, ... props })
+));
   const dimensions: IDimensions = {
     width,
     height,

@@ -4,6 +4,11 @@ import PlayerKeyMap, { ActionTypes } from '../../src/player-key-map';
 import useKeyPress from '../../src/use-key-press';
 import Entity from '../Entity';
 
+const classNames = [
+  'farmer',
+  'player'
+].join(' ');
+
 export default function Player({dimensions, terrain}: IProps) {
   const [position, setPosition] = useState({x: 0, y: 0});
   const { width, height } = dimensions;
@@ -25,14 +30,14 @@ export default function Player({dimensions, terrain}: IProps) {
       )
     };
 
-    if(!terrain.canMove(nPos.x, nPos.y)) { return; }
+    if(!terrain.canMove(nPos)) { return; }
 
     setPosition(nPos);
   });
 
   return <Entity
     offset={position}
-    names={{farmer: true, player: true}}
+    classNames={classNames}
     dimensions={dimensions}
   />;
 }

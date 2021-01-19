@@ -8,11 +8,10 @@ export default function test() {
     width: oneHundredPercent,
     height: oneHundredPercent,
   }}>
-    <div className={'entity-layer'} style={{transform: 'scale(2)'}}>
-      <div className={['slime', 'moving', 'south'].join(' ')} />
+    <div className={'entity-layer'} >
       {['south', 'west','east','north'].map((n, i) => <div key={i}
         className={['slime', 'moving'].concat([`${n}`]).join(' ')}
-        style={{top: (i + 1) * 16}}  
+        style={{top: (i + 0) * 16}}  
       />)}
       
     </div>

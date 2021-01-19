@@ -1,8 +1,7 @@
-import  getClasses  from '../src/get-classes';
-
-export default function Entity({offset, dimensions, names}) {
+export default function Entity({offset, dimensions, classNames}) {
   const { units, resolution } = dimensions;
-  return <div className={getClasses(names)}
+
+  return <div className={classNames}
     style={{
       left: `${offset.x * resolution}${units}`,
       top: `${offset.y * resolution}${units}`,
@@ -15,5 +14,5 @@ export interface Props {
     x: number, //px
     y: number //px
   },
-  names: {[key: string]: boolean};
+  classNames: string[];
 }

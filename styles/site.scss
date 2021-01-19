@@ -41,7 +41,8 @@ html, body, #__next {
 }
 
 @mixin bgPosition($x, $y) {
-  background-position: -(c.$pixel-block-size * $x) -(c.$pixel-block-size * $y);
+  background-position-x: -(c.$pixel-block-size * $x);
+  background-position-y: -(c.$pixel-block-size * $y);
 }
 
 @mixin bgPositionX($x) {
@@ -95,5 +96,6 @@ html, body, #__next {
 .slime {
   background-image: url('/Characters/Monsters/Slimes/Slime.png');
   position: relative;
+  transition: left 1s ease-out, top 1s ease-out;
   @include bgPositionY(0);
 }
