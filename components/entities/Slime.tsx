@@ -3,62 +3,20 @@ import React, { useState, useEffect } from 'react';
 import { Observable } from 'rxjs';
 import IDimensions from '../../src/interfaces/dimensions';
 import IPosition, { IPartial } from '../../src/interfaces/position';
-import Entity from '../Entity';
+import Vector, { iVector } from '../../src/Vector';
+import Direction from '../../src/terrain/direction';
+import Entity from './Entity';
 
 const classNames = ['slime'].join(' ');
 
-export default function Slime({dimensions, terrain, startPos, tickService, timeOfInit}: IProps) {
+export default function Slime({dimensions, terrain, startPos, tickService}: IProps) {
   const [position, setPosition] = useState(startPos);
   const [isMoving, setIsMoving] = useState<boolean>();
   const [direction, setDirection] = useState<string>();
 
   useEffect(() => {
-    const id = setInterval(() => {
-      const moves: IDirection[] = [
-        { x: 1, direction: 'east' },
-        { y: 1, direction: 'south' },
-        { x: -1, direction: 'west' },
-        { y: -1, direction: 'north' },
-      ];
-      let cantMove = true;
-      let nPos: IPosition;
-      let move: any;
-      let index: number;
-
-      while(moves.length > 0 && cantMove) {
-        index = _.random(moves.length - 1);
-        move = moves[index];
-        const newMove = move.x !== undefined ?
-            { x: position.x + move.x }:
-            { y: position.y + move.y };
-        nPos = {
-          ... position,
-          ... newMove
-        };
-
-        cantMove = !terrain.canMove(nPos);
-        if(cantMove) {
-          console.log('Failed to move', move, position);
-          moves.splice(index, 1);
-        }
-      }
-
-      if(cantMove) { return; };
-      const delta = {
-        x: Math.abs(nPos.x  - position.x),
-        y: Math.abs(nPos.y  - position.y)
-      };
-      if(delta.x > 1 || delta.y > 1 || (delta.x + delta.y) > 1) {
-        console.log('error');
-      }
-      setPosition(nPos);
-      setIsMoving(true);
-      setDirection(move.direction);
-      setTimeout(() => {
-        setIsMoving(false);
-      }, 1000);
-    }, 2500);
-    return () => clearInterval(id);
+    const sub = tickService.subscribe(updatePosition);
+    return () => sub.unsubscribe();
   }, [position.x, position.y]);
 
   return <Entity
@@ -68,14 +26,41 @@ export default function Slime({dimensions, terrain, startPos, tickService, timeO
       classNames}
     dimensions={dimensions}
   />;
+
+  function updatePosition() {
+    const moves = Direction.asList();
+    let cantMove = true;
+    let nPos: Vector;
+    let move: Vector;
+    let index: number;
+
+    while(moves.length > 0 && cantMove) {
+      index = _.random(moves.length);
+      const move = moves[index];
+      nPos = position.add(move);
+
+      cantMove = !terrain.canMove(nPos);
+      if(cantMove) {
+        console.log('Failed to move', move, position);
+        moves.splice(index, 1);
+      }
+    }
+
+    if(cantMove) { return; };
+    setPosition(nPos);
+    setIsMoving(true);
+    setDirection(Direction.getDirection(move));
+    setTimeout(() => {
+      setIsMoving(false);
+    }, 1000);
+  }
 }
 
 interface IProps {
   terrain: any;
   dimensions: IDimensions;
-  timeService: Observable<number>;
-  startPos: { x: number, y: number };
-  timeOfInit: string;
+  tickService: Observable<number>;
+  startPos: Vector;
 }
 
 interface IDirection extends IPartial {

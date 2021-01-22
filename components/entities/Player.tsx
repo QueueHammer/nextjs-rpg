@@ -1,8 +1,8 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import IDimensions from '../../src/interfaces/dimensions';
 import PlayerKeyMap, { ActionTypes } from '../../src/player-key-map';
 import useKeyPress from '../../src/use-key-press';
-import Entity from '../Entity';
+import Entity from './Entity';
 
 const classNames = [
   'farmer',
@@ -35,11 +35,11 @@ export default function Player({dimensions, terrain}: IProps) {
     setPosition(nPos);
   });
 
-  return <Entity
+  return useMemo(() => <Entity
     offset={position}
     classNames={classNames}
     dimensions={dimensions}
-  />;
+  />, [position.x, position.y, classNames]);
 }
 
 interface IProps {

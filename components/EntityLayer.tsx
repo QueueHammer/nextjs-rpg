@@ -1,7 +1,7 @@
 import { useState, useEffect, Component } from 'react';
 import IDimensions from '../src/interfaces/dimensions';
 import useKeyPress from '../src/use-key-press';
-import Entity from './Entity';
+import Entity from './entities/Entity';
 
 export default function EntityLayer({entities, dimensions}: IProps) {
   const { width, height, resolution, units } = dimensions;
