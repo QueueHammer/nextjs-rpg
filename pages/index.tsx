@@ -6,6 +6,7 @@ import IDimensions from '../src/interfaces/dimensions';
 import Terrain from '../src/terrain';
 import { interval } from 'rxjs';
 import { take, map } from 'rxjs/operators';
+import Vector from '../src/Vector';
 const now = Math.floor(Date.now() /1000);
 
 
@@ -22,7 +23,7 @@ const tickService = interval(2500).pipe(
 const entities = [
   (props) => Player({terrain, ... props }),
 ].concat(_.range(1)
-  .map($ => ({x: _.random(width), y: _.random(height)}))
+  .map($ => (new Vector(_.random(width), _.random(height))))
   .map(startPos =>
     (props) => Slime({terrain, startPos, tickService, ... props })
 ));

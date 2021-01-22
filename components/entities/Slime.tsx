@@ -2,7 +2,6 @@ import _ from 'lodash';
 import React, { useState, useEffect } from 'react';
 import { Observable } from 'rxjs';
 import IDimensions from '../../src/interfaces/dimensions';
-import IPosition, { IPartial } from '../../src/interfaces/position';
 import Vector, { iVector } from '../../src/Vector';
 import Direction from '../../src/terrain/direction';
 import Entity from './Entity';
@@ -31,13 +30,14 @@ export default function Slime({dimensions, terrain, startPos, tickService}: IPro
     const moves = Direction.asList();
     let cantMove = true;
     let nPos: Vector;
-    let move: Vector;
+    let move: Direction;
     let index: number;
 
     while(moves.length > 0 && cantMove) {
-      index = _.random(moves.length);
+      index = _.random(moves.length - 1);
       const move = moves[index];
-      nPos = position.add(move);
+      console.log('assigned move', move, index);
+      nPos = position.add(move.vector);
 
       cantMove = !terrain.canMove(nPos);
       if(cantMove) {
@@ -49,7 +49,7 @@ export default function Slime({dimensions, terrain, startPos, tickService}: IPro
     if(cantMove) { return; };
     setPosition(nPos);
     setIsMoving(true);
-    setDirection(Direction.getDirection(move));
+    setDirection(move.direction);
     setTimeout(() => {
       setIsMoving(false);
     }, 1000);
@@ -61,8 +61,4 @@ interface IProps {
   dimensions: IDimensions;
   tickService: Observable<number>;
   startPos: Vector;
-}
-
-interface IDirection extends IPartial {
-  direction: 'east' | 'south' | 'west' | 'north';
 }

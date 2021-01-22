@@ -1,39 +1,48 @@
 import Vector from '../Vector'
 
-export default class Direction {
-  public static get north() { return Vector.newScalerY(1); }
+export default class Direction implements iDirection {
+  public vector: Vector;
+  public direction: CardinalDirections;
 
-  public static get east() { return Vector.newScalerX(1); }
+  public static get North(): Direction {
+    return {
+      vector: Vector.newScalerY(1),
+      direction: 'north'
+    };
+  }
 
-  public static get south() { return Vector.newScalerY(-1); }
+  public static get East(): Direction {
+    return {
+      vector: Vector.newScalerX(1),
+      direction: 'east'
+    };
+  }
 
-  public static get west() { return Vector.newScalerX(-1); }
+  public static get South(): Direction {
+    return {
+      vector: Vector.newScalerY(-1),
+      direction: 'south'
+    };
+  }
+
+  public static get West(): Direction {
+    return {
+      vector: Vector.newScalerX(-1),
+      direction: 'west'
+    };
+  }
 
   public static asList() { return [
-    Direction.north,
-    Direction.south,
-    Direction.east,
-    Direction.west
+    Direction.North,
+    Direction.South,
+    Direction.East,
+    Direction.West
   ];}
-
-  public static asKeys() { return [
-    'north',
-    'south',
-    'east',
-    'west'
-  ];}
-
-  public static getDirection(d: Vector) {
-    if(d.equals(Direction.north)) { return CardinalDirections.North; }
-    if(d.equals(Direction.east)) { return CardinalDirections.East; }
-    if(d.equals(Direction.south)) { return CardinalDirections.South; }
-    if(d.equals(Direction.west)) { return CardinalDirections.West; }
-  }
 }
 
-export enum CardinalDirections {
-  North = 'north',
-  East = 'east',
-  South = 'south',
-  West = 'west',
+export interface iDirection {
+  vector: Vector;
+  direction: CardinalDirections;
 }
+
+export type CardinalDirections = 'north' | 'south' | 'east' | 'west';

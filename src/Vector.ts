@@ -1,6 +1,6 @@
 export default class Vector implements iVector{
   // https://evanw.github.io/lightgl.js/docs/vector.html
-  constructor(public x: number, public y: number, public z: number) { }
+  constructor(public x: number, public y: number, public z: number = 0) { }
 
   public add(v: Vector | number) {
     return Vector.isVector(v)?
