@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import { random, range } from 'lodash';
 import Slime from '../components/entities/Slime';
 import GameBoard from '../components/GameBoard';
 import Player from '../components/entities/Player';
@@ -22,8 +22,8 @@ const tickService = interval(2500).pipe(
 
 const entities = [
   (props) => Player({terrain, ... props }),
-].concat(_.range(1)
-  .map($ => (new Vector(_.random(width), _.random(height))))
+].concat(range(1)
+  .map($ => (new Vector(random(width -1 ), random(height-1))))
   .map(startPos =>
     (props) => Slime({terrain, startPos, tickService, ... props })
 ));

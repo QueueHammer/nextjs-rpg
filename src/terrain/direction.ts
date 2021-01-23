@@ -6,29 +6,29 @@ export default class Direction implements iDirection {
 
   public static get North(): Direction {
     return {
-      vector: Vector.newScalerY(1),
-      direction: 'north'
+      vector: Vector.newScalerY(-1),
+      direction: CardinalDirections.North
     };
   }
 
   public static get East(): Direction {
     return {
       vector: Vector.newScalerX(1),
-      direction: 'east'
+      direction: CardinalDirections.East
     };
   }
 
   public static get South(): Direction {
     return {
-      vector: Vector.newScalerY(-1),
-      direction: 'south'
+      vector: Vector.newScalerY(1),
+      direction: CardinalDirections.South
     };
   }
 
   public static get West(): Direction {
     return {
       vector: Vector.newScalerX(-1),
-      direction: 'west'
+      direction: CardinalDirections.West
     };
   }
 
@@ -45,4 +45,9 @@ export interface iDirection {
   direction: CardinalDirections;
 }
 
-export type CardinalDirections = 'north' | 'south' | 'east' | 'west';
+export enum CardinalDirections {
+  North = 'north',
+  South = 'south',
+  East = 'east',
+  West = 'west'
+}
